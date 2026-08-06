@@ -22,9 +22,10 @@
             --button-bg: #ffffff;
             --button-text: #1f2133;
             --button-border: #1f2133;
-            --surface-bg: rgba(255, 255, 255, 0.6);
+            --surface-bg: rgba(255, 255, 255, 0.8);
             --surface-border: rgba(110, 115, 141, 0.2);
             --img-glow: rgba(122, 124, 184, 0.2);
+            --player-bg: rgba(255, 255, 255, 0.85);
         }
 
         /* Dark Mode Theme (Nightcord at 25:00 Vibe) */
@@ -38,9 +39,10 @@
             --button-bg: #14161f;
             --button-text: #e2e4f0;
             --button-border: #9d9fea;
-            --surface-bg: rgba(20, 22, 31, 0.6);
+            --surface-bg: rgba(20, 22, 31, 0.7);
             --surface-border: rgba(157, 159, 234, 0.2);
             --img-glow: rgba(157, 159, 234, 0.15);
+            --player-bg: rgba(11, 12, 16, 0.9);
         }
 
         * {
@@ -58,6 +60,7 @@
             overflow-x: hidden;
             position: relative;
             scroll-behavior: smooth;
+            padding-bottom: 90px; /* Space for the music player */
             
             /* Technical Grid */
             background-image: 
@@ -418,6 +421,214 @@
             margin-right: 12px;
             color: var(--accent-cyan);
         }
+        
+        /* Coming Soon Playlist Style */
+        .coming-soon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+            text-align: center;
+            border: 1px dashed var(--surface-border);
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .coming-soon-icon {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* Spotify-style Music Player Bar */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: var(--player-bg);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--surface-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 100;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hide State for Music Player */
+        .music-player.collapsed {
+            transform: translateY(100%);
+        }
+
+        .player-toggle-btn {
+            position: absolute;
+            top: -30px;
+            right: 40px;
+            width: 44px;
+            height: 30px;
+            background: var(--player-bg);
+            border: 1px solid var(--surface-border);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: color 0.3s, background 0.3s;
+        }
+
+        .player-toggle-btn:hover {
+            color: var(--accent-purple);
+        }
+
+        .player-toggle-btn svg {
+            transition: transform 0.4s ease;
+        }
+
+        .music-player.collapsed .player-toggle-btn svg {
+            transform: rotate(180deg); /* Flip icon when collapsed */
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 30%;
+        }
+
+        .player-info img {
+            width: 56px;
+            height: 56px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--surface-border);
+        }
+
+        .track-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .track-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .track-artist {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .player-controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+            gap: 10px;
+        }
+
+        .play-btn {
+            background: var(--text-main);
+            color: var(--bg-color);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .play-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            margin-left: 2px;
+        }
+
+        .play-btn.playing svg {
+            margin-left: 0;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 4px;
+            background: var(--surface-border);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-purple);
+            border-radius: 2px;
+            width: 0%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .player-volume {
+            width: 30%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-volume svg {
+            color: var(--text-muted);
+        }
+
+        .volume-slider {
+            width: 100px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--surface-border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+        }
 
         /* Footer */
         footer {
@@ -451,7 +662,41 @@
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .music-player {
+                padding: 0 15px;
+                height: 80px;
+            }
+            .player-toggle-btn {
+                right: 15px;
+            }
+            .player-volume {
+                display: none; /* Hide volume on mobile to save space */
+            }
+            .player-info {
+                width: 50%;
+            }
+            .player-controls-container {
+                width: 50%;
+            }
+            .player-info img {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .track-artist { display: none; }
+            .track-name { 
+                font-size: 13px; 
+                white-space: nowrap; 
+                overflow: hidden; 
+                text-overflow: ellipsis; 
+                max-width: 120px; 
+            }
+            .player-info img { width: 40px; height: 40px; }
+            .player-controls-container { gap: 4px; }
+            .progress-container { font-size: 10px; }
             footer { flex-direction: column; gap: 20px; align-items: flex-start; }
             .data-list li { flex-direction: column; }
             .data-list span.label { margin-bottom: 2px; }
@@ -585,9 +830,27 @@
                         <span>Custom lightweight Windows OS builds for max performance.</span>
                     </a>
                     <a href="https://wa.me/6282157833066" class="proj-link" target="_blank">
-                        <strong>NookGamestore</strong>
-                        <span>Technical support and system optimization services.</span>
+                        <strong>Technical Services</strong>
+                        <span>Self-taught technical support and system optimization services.</span>
                     </a>
+                </div>
+
+                <!-- Playlist (Coming Soon) -->
+                <div class="bento-box">
+                    <h3 class="box-title">// SYS.PLAYLIST</h3>
+                    <div class="coming-soon-container">
+                        <svg class="coming-soon-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                        <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 2px; color: var(--accent-purple); font-weight: 700;">
+                            [ COMING SOON ]
+                        </div>
+                        <div style="font-family: 'Space Mono', monospace; font-size: 11px; margin-top: 8px; color: var(--text-muted);">
+                            AUDIO_DATA_UNAVAILABLE
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Socials & Network -->
@@ -620,14 +883,65 @@
 
     </div>
 
-    <!-- Script for Dark/Light Mode Toggle -->
+    <!-- Music Player (Spotify Style) -->
+    <div class="music-player" id="music-player">
+        <!-- Toggle Button to Hide/Show Player -->
+        <button class="player-toggle-btn" id="player-toggle-btn" aria-label="Toggle Player">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+
+        <!-- AUDIO SOURCE -->
+        <audio id="bg-music" loop>
+            <source src="https://files.catbox.moe/di1n8i.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="player-info">
+            <img src="https://files.catbox.moe/9n8vpj.webp" alt="Album Cover">
+            <div class="track-details">
+                <span class="track-name">Bug (バグ)</span>
+                <span class="track-artist">Nightcord at 25:00</span>
+            </div>
+        </div>
+
+        <div class="player-controls-container">
+            <button class="play-btn" id="play-pause-btn">
+                <!-- Play Icon -->
+                <svg id="play-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <!-- Pause Icon (Hidden by default) -->
+                <svg id="pause-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            </button>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar-bg" id="progress-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <span id="total-time">0:00</span>
+            </div>
+        </div>
+
+        <div class="player-volume">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+
+    <!-- JavaScript Controls -->
     <script>
+        // Dark/Light Mode Logic
         const themeToggle = document.getElementById('theme-toggle');
         const rootElement = document.documentElement;
         const iconSun = document.getElementById('icon-sun');
         const iconMoon = document.getElementById('icon-moon');
 
-        // Toggle Function
         themeToggle.addEventListener('click', () => {
             const currentTheme = rootElement.getAttribute('data-theme');
             if (currentTheme === 'dark') {
@@ -640,6 +954,79 @@
                 iconMoon.style.display = 'none';
             }
         });
+
+        // Toggle Hide/Show Music Player
+        const player = document.getElementById('music-player');
+        const togglePlayerBtn = document.getElementById('player-toggle-btn');
+        
+        togglePlayerBtn.addEventListener('click', () => {
+            player.classList.toggle('collapsed');
+        });
+
+        // Music Player Logic
+        const audio = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const progressBg = document.getElementById('progress-bg');
+        const progressFill = document.getElementById('progress-fill');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        let isPlaying = false;
+
+        // Format Time helper (seconds to M:SS)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Load metadata to set total time
+        audio.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // Play / Pause
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.classList.remove('playing');
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                audio.play().catch(e => console.log("Audio play failed:", e));
+                playBtn.classList.add('playing');
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Update Progress Bar as song plays
+        audio.addEventListener('timeupdate', () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        // Click to seek in song
+        progressBg.addEventListener('click', (e) => {
+            const width = progressBg.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        });
+
+        // Volume Control
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+        
+        // Init volume
+        audio.volume = volumeSlider.value;
     </script>
 </body>
 </html>
